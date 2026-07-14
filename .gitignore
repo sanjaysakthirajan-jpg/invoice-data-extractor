@@ -1,0 +1,20 @@
+# Environment / secrets
+.env
+*.env
+
+# Databases (generated output, not source)
+*.db
+*.sqlite
+*.sqlite3
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# PyCharm
+.idea/
+
+# OS
+.DS_Store

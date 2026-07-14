@@ -1,0 +1,26 @@
+INVOICE
+
+Acme Robotics Supply Co.
+1245 Industrial Way, Suite 200
+Portland, OR 97201
+
+Bill To: Northwind Manufacturing LLC
+Attn: Sarah Chen, Procurement
+
+Invoice Number: INV-2026-04471
+Invoice Date: June 18, 2026
+Due Date: July 18, 2026
+
+Description                          Qty    Unit Price    Total
+------------------------------------------------------------------
+Servo Motor Assembly (Model SM-220)    12     $84.50       $1,014.00
+Industrial Wiring Harness               8     $22.75         $182.00
+Control Board Rev C                     4    $310.00       $1,240.00
+Shipping & Handling                     -           -          $75.00
+
+                                              Subtotal:    $2,511.00
+                                              Tax (8.25%):   $207.16
+                                              TOTAL DUE:   $2,718.16
+
+Payment Terms: Net 30
+Please remit payment to account ending in 4432.
