@@ -4,7 +4,7 @@ from pathlib import Path
 from extract import extract_invoice, InvoiceData
 from ground_truth import GROUND_TRUTH
 
-TOLERANCE = 0.01  # allowable floating-point rounding difference for money
+TOLERANCE = 0.01
 
 
 def fields_match(expected, actual) -> bool:
@@ -15,12 +15,12 @@ def fields_match(expected, actual) -> bool:
             return abs(float(expected) - float(actual)) < TOLERANCE
         except (TypeError, ValueError):
             return False
-    # Case-insensitive, whitespace-trimmed string comparison
+
     return str(expected).strip().lower() == str(actual).strip().lower()
 
 
 def check_accuracy(filename: str, data: InvoiceData) -> tuple[int, int, list[str]]:
-    """Compare extracted data against ground truth. Returns (correct, total, mismatches)."""
+
     truth = GROUND_TRUTH.get(filename)
     if truth is None:
         return 0, 0, [f"No ground truth defined for {filename}"]
@@ -51,7 +51,7 @@ def check_accuracy(filename: str, data: InvoiceData) -> tuple[int, int, list[str
 
 
 def check_consistency(data: InvoiceData) -> list[str]:
-    """Sanity checks independent of ground truth -- do the numbers add up?"""
+
     issues = []
 
     for item in data.line_items:
