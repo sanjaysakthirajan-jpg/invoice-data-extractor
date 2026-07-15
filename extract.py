@@ -32,9 +32,9 @@ class InvoiceData(BaseModel):
 
 
 def pydantic_to_tool_schema(model: type[BaseModel], name: str, description: str) -> dict:
-    """Convert a pydantic model into the 'tool' format the Anthropic API expects."""
+
     schema = model.model_json_schema()
-    # Anthropic's tool schema wants "input_schema", not the raw pydantic schema key names
+
     return {
         "name": name,
         "description": description,
@@ -42,9 +42,6 @@ def pydantic_to_tool_schema(model: type[BaseModel], name: str, description: str)
     }
 
 
-# ---------------------------------------------------------------------------
-# Step 2: Call Claude, forcing it to use our "extract_invoice_data" tool.
-# ---------------------------------------------------------------------------
 
 def extract_invoice(raw_text: str) -> InvoiceData:
     client = Anthropic()  # reads ANTHROPIC_API_KEY from environment
@@ -59,8 +56,7 @@ def extract_invoice(raw_text: str) -> InvoiceData:
         model="claude-sonnet-4-6",
         max_tokens=1024,
         tools=[tool],
-        # tool_choice forces Claude to call this specific tool rather than
-        # just replying with text -- this is what guarantees structured output
+
         tool_choice={"type": "tool", "name": "extract_invoice_data"},
         messages=[
             {
@@ -74,10 +70,7 @@ def extract_invoice(raw_text: str) -> InvoiceData:
 
 
 def extract_invoice_from_pdf(pdf_bytes: bytes) -> InvoiceData:
-    """
-    Same as extract_invoice, but takes raw PDF bytes instead of text.
-    Claude reads the PDF directly -- no OCR library needed on our end.
-    """
+
     import base64
 
     client = Anthropic()
@@ -120,12 +113,10 @@ def extract_invoice_from_pdf(pdf_bytes: bytes) -> InvoiceData:
 
 
 def _parse_tool_response(response) -> InvoiceData:
-    # Find the tool_use block in the response and pull out its input
+
     for block in response.content:
         if block.type == "tool_use":
-            # Validate against our schema -- this will raise an error if
-            # Claude somehow returned something malformed, instead of us
-            # finding out later when the code that uses this data breaks.
+
             return InvoiceData.model_validate(block.input)
 
     raise RuntimeError("Model did not return a tool_use block")
