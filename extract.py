@@ -54,7 +54,7 @@ def extract_invoice(raw_text: str) -> InvoiceData:
 
     response = client.messages.create(
         model="claude-sonnet-4-6",
-        max_tokens=1024,
+        max_tokens=4096,
         tools=[tool],
 
         tool_choice={"type": "tool", "name": "extract_invoice_data"},
@@ -85,7 +85,7 @@ def extract_invoice_from_pdf(pdf_bytes: bytes) -> InvoiceData:
 
     response = client.messages.create(
         model="claude-sonnet-4-6",
-        max_tokens=1024,
+        max_tokens=4096,
         tools=[tool],
         tool_choice={"type": "tool", "name": "extract_invoice_data"},
         messages=[
@@ -113,6 +113,12 @@ def extract_invoice_from_pdf(pdf_bytes: bytes) -> InvoiceData:
 
 
 def _parse_tool_response(response) -> InvoiceData:
+
+    if response.stop_reason == "max_tokens":
+        raise RuntimeError(
+            "Extraction was cut off by the max_tokens limit -- the invoice is "
+            "likely too large. Increase max_tokens and retry."
+        )
 
     for block in response.content:
         if block.type == "tool_use":

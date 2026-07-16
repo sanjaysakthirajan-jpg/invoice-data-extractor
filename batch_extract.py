@@ -81,7 +81,7 @@ def main(folder_path: str) -> None:
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Usage: python batch_extract_mysql.py <folder_of_txt_files>")
+        print("Usage: python batch_extract.py <folder_of_txt_files>")
         sys.exit(1)
 
     main(sys.argv[1])
